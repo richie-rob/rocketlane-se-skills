@@ -1,0 +1,15 @@
+{
+  "name": "rocketlane-se-skills",
+  "displayName": "Rocketlane SE Skills",
+  "description": "Claude Code skills for the Rocketlane Solutions Engineering team",
+  "plugins": [
+    {
+      "name": "rocketlane-portal-from-calendar",
+      "displayName": "Rocketlane Portal from Calendar",
+      "description": "Auto-create branded Rocketlane customer portals from external calendar meetings. Scrapes brand colors, logo, and YouTube video for each customer domain.",
+      "version": "1.0.0",
+      "type": "skill",
+      "path": "skills/rocketlane-portal-from-calendar"
+    }
+  ]
+}
