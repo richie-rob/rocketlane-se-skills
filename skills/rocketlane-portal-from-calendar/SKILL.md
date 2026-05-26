@@ -47,7 +47,12 @@ The chosen domain (e.g. `acme.io`) is what gets used downstream. The "domain nam
 
 ### Step 3 — Create a theme from the website (API 1)
 
-**Try BrandFetch once only.** Do NOT retry with TLD variants — BrandFetch failures are platform-wide and retrying different TLDs wastes time without helping.
+**Session-level BrandFetch flag**: Before the per-meeting loop begins, initialise `brandfetch_available = True`. The moment BrandFetch returns anything other than a 2xx success for any domain, set `brandfetch_available = False` and keep it `False` for the rest of the run. This prevents hammering a rate-limited endpoint for every subsequent domain.
+
+Per meeting:
+
+- If `brandfetch_available` is `False` → skip straight to **Step 3b**. Do not attempt the API call at all.
+- If `brandfetch_available` is `True` → attempt the call once:
 
 ```
 POST {base_url}/customer-portal-theme/portal-from-website
@@ -60,7 +65,7 @@ Content-Type: application/json
 ```
 
 - If the response is **2xx with usable data** → save the JSON, proceed to Step 4.
-- If the response is **anything else** (4xx, 5xx, empty, BrandFetch 429) → immediately go to **Step 3b** (manual fallback). Do not retry.
+- If the response is **anything else** (4xx, 5xx, empty, BrandFetch 429) → set `brandfetch_available = False`, immediately go to **Step 3b** (manual fallback). Do not retry with TLD variants.
 
 ### Step 3b — Manual theme fallback (when BrandFetch fails)
 
