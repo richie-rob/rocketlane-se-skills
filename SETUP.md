@@ -6,48 +6,38 @@ This skill automatically creates branded Rocketlane customer portals from your c
 
 ## Prerequisites
 
-You'll need **Claude Code** installed. If you don't have it yet:
-1. Download it from https://claude.ai/claude-code
-2. Install and open it — it runs in your terminal
+You'll need **Claude Code** installed. If you don't have it yet, download it from https://claude.ai/claude-code.
 
 ---
 
-## Step 1 — Clone the skills repo
+## Step 1 — Install the skill
 
-Open your terminal and run:
+Run this single command in your terminal:
 
 ```bash
-git clone https://github.com/richie-rob/rocketlane-se-skills.git ~/rocketlane-se-skills
+mkdir -p ~/.claude/skills/rocketlane-portal-from-calendar && \
+curl -o ~/.claude/skills/rocketlane-portal-from-calendar/SKILL.md \
+  https://raw.githubusercontent.com/richie-rob/rocketlane-se-skills/main/skills/rocketlane-portal-from-calendar/SKILL.md
 ```
 
----
-
-## Step 2 — Add the skill to Claude Code
-
-1. Open **Claude Code**
-2. Run `/plugins` to open the plugins panel
-3. Click **Add plugin**
-4. Choose **Local directory** and point it to:
-   ```
-   ~/rocketlane-se-skills/skills
-   ```
-5. Click **Install** — the skill will appear immediately
+That's it. The skill is now installed and available in every Claude Code session.
 
 ---
 
-## Step 3 — Connect Google Calendar
+## Step 2 — Connect Google Calendar
 
 The skill needs access to your Google Calendar to find today's external meetings.
 
-1. In Claude Code, run `/plugins`
-2. Find the **Google Calendar** connector and click **Connect**
-3. Sign in with your Rocketlane Google account when prompted
+1. Open **Claude Code**
+2. Click the **Cowork** tab
+3. Find **Google Calendar** and click **Connect**
+4. Sign in with your Rocketlane Google account
 
 ---
 
 ## How to use it
 
-Once set up, just type naturally in Claude Code:
+Just type naturally in Claude Code:
 
 | What you want | What to say |
 |---|---|
@@ -55,27 +45,24 @@ Once set up, just type naturally in Claude Code:
 | Portal for a specific customer | *"Create a customer portal for acme.com"* |
 | Prep before a demo | *"Create an RL portal for freshworks.com"* |
 
-Claude will:
-- Find your external meetings (or use the domain you give it)
-- Scrape the customer's brand colors and logo
-- Create a matching theme in Rocketlane
-- Build the portal with the logo and a relevant YouTube video
+Claude will find your external meetings (or use the domain you give it), scrape the customer's brand colors and logo, and build the portal with a matching theme and YouTube video — all automatically.
 
 ---
 
 ## Keeping it up to date
 
-When the skill is updated, just run this in your terminal to get the latest version:
+When the skill is updated, run this in your terminal to get the latest version:
 
 ```bash
-cd ~/rocketlane-se-skills && git pull
+curl -o ~/.claude/skills/rocketlane-portal-from-calendar/SKILL.md \
+  https://raw.githubusercontent.com/richie-rob/rocketlane-se-skills/main/skills/rocketlane-portal-from-calendar/SKILL.md
 ```
-
-No reinstall needed — Claude picks up the changes immediately.
 
 ---
 
 ## Troubleshooting
+
+**Skill not showing up** — Restart Claude Code after installing for the first time.
 
 **"No external meetings found"** — The skill only looks at meetings with attendees outside `rocketlane.com`. Make sure your calendar invites include the customer's email addresses.
 
