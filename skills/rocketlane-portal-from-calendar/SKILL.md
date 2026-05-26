@@ -47,12 +47,14 @@ The chosen domain (e.g. `acme.io`) is what gets used downstream. The "domain nam
 
 ### Step 3 — Create a theme from the website (API 1)
 
-**Session-level BrandFetch flag**: Before the per-meeting loop begins, initialise `brandfetch_available = True`. The moment BrandFetch returns anything other than a 2xx success for any domain, set `brandfetch_available = False` and keep it `False` for the rest of the run. This prevents hammering a rate-limited endpoint for every subsequent domain.
+> ⚠️ **BrandFetch is rate-limited at the Rocketlane platform level.** It will return 429 or 500 on the first call. This is expected and permanent until Rocketlane fixes their quota. Do NOT add delays. Do NOT retry. Do NOT try TLD variants. The moment you see a non-2xx response, go straight to Step 3b.
+
+**Session-level flag**: initialise `brandfetch_available = True` before the per-meeting loop.
 
 Per meeting:
 
-- If `brandfetch_available` is `False` → skip straight to **Step 3b**. Do not attempt the API call at all.
-- If `brandfetch_available` is `True` → attempt the call once:
+- If `brandfetch_available` is **`False`** → **skip this step entirely**, go straight to Step 3b. Do not make any API call.
+- If `brandfetch_available` is **`True`** → attempt the call **exactly once**, no retries, no delays:
 
 ```
 POST {base_url}/customer-portal-theme/portal-from-website
@@ -64,8 +66,9 @@ Content-Type: application/json
 }
 ```
 
-- If the response is **2xx with usable data** → save the JSON, proceed to Step 4.
-- If the response is **anything else** (4xx, 5xx, empty, BrandFetch 429) → set `brandfetch_available = False`, immediately go to **Step 3b** (manual fallback). Do not retry with TLD variants.
+**Immediately after the response:**
+- **2xx with usable data** → save the JSON, proceed to Step 4.
+- **Anything else** (4xx, 5xx, 429, empty, timeout) → set `brandfetch_available = False`, go to Step 3b. No sleep. No retry. No fallback URL attempts. Just go to Step 3b.
 
 ### Step 3b — Manual theme fallback (when BrandFetch fails)
 
@@ -451,7 +454,7 @@ For each meeting, do all four API calls in sequence and accumulate results befor
 
 ## Error handling rules
 
-- **API 1 (BrandFetch) returns anything other than 2xx**: immediately fall back to Step 3b (manual theme). Do NOT retry with TLD variants — BrandFetch failures are server-side and TLD retries always fail too.
+- **API 1 (BrandFetch) returns anything other than 2xx**: set `brandfetch_available = False`, immediately fall back to Step 3b. No delays. No retries. No TLD variants. No sleep calls. BrandFetch is broken at the Rocketlane platform level — retrying wastes time and makes the run slow for every meeting.
 - **API 2 returns 4xx with font-related message OR returns 5xx**: retry once with all `fontName` values in `typography[]` and `buttons[]` replaced with `"Acme"`. After that, log failure and skip.
 - **API 2 returns 405**: retry with `PUT`.
 - **API 3 returns non-2xx**: stop the entire run — the source template is required for all meetings. Report to user.
