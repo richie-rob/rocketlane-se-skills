@@ -15,9 +15,7 @@ You'll need **Claude Code** installed. If you don't have it yet, download it fro
 Run this single command in your terminal:
 
 ```bash
-mkdir -p ~/.claude/skills/rocketlane-portal-from-calendar && \
-curl -o ~/.claude/skills/rocketlane-portal-from-calendar/SKILL.md \
-  https://raw.githubusercontent.com/richie-rob/rocketlane-se-skills/main/skills/rocketlane-portal-from-calendar/SKILL.md
+mkdir -p ~/.claude/skills/rocketlane-portal-from-calendar && curl -o ~/.claude/skills/rocketlane-portal-from-calendar/SKILL.md "https://raw.githubusercontent.com/richie-rob/rocketlane-se-skills/main/skills/rocketlane-portal-from-calendar/SKILL.md"
 ```
 
 That's it. The skill is now installed and available in every Claude Code session.
@@ -54,8 +52,7 @@ Claude will find your external meetings (or use the domain you give it), scrape 
 When the skill is updated, run this in your terminal to get the latest version:
 
 ```bash
-curl -o ~/.claude/skills/rocketlane-portal-from-calendar/SKILL.md \
-  https://raw.githubusercontent.com/richie-rob/rocketlane-se-skills/main/skills/rocketlane-portal-from-calendar/SKILL.md
+curl -o ~/.claude/skills/rocketlane-portal-from-calendar/SKILL.md "https://raw.githubusercontent.com/richie-rob/rocketlane-se-skills/main/skills/rocketlane-portal-from-calendar/SKILL.md"
 ```
 
 ---
